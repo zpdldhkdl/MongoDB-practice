@@ -1,22 +1,13 @@
-const mongodb = require('mongodb');
+const mongoose = require('mongoose');
 const config = require('../config');
 
-let connection = null;
+let db = mongoose.connection;
+db.on('error', console.error);
+db.once('open', () => {
+    console.log('Connected to mongodb server');
+});
 
-exports.connect = async () => {
-    connection = await mongodb.MongoClient.connect(config.MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-    return connection.db('HUMOR');
-};
-
-exports.disconnect = async () => {
-    if (!connection) {
-        console.log('cannot found connection');
-        return;
-    }
-
-    await connection.disconnect();
-    console.log('MongoDB Disconnected');
-};
+mongoose.connect(config.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
