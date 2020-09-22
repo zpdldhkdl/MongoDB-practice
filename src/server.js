@@ -1,15 +1,21 @@
 const config = require('./config');
 const express = require('express');
 const app = express();
-const router = express.Router();
 const db = require('./lib/mongodb');
 const apis = require('./api');
+const bodyParser = require('body-parser');
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
-router.use('/api', apis);
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+app.use('/api', apis);
 
 const htmlRouter = require('./router/index')(app);
 
