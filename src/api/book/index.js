@@ -5,7 +5,7 @@ const {
     getAllBook,
 } = require('./book.api');
 
-bookRouter.get('/books', getAllBook);
-bookRouter.post('/books', createBook);
+bookRouter.get('/', getAllBook);
+bookRouter.post('/', createBook);
 
 module.exports = bookRouter;
