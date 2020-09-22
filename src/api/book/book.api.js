@@ -17,7 +17,10 @@ exports.createBook = async(req, res) => {
         res.redirect('/');
     }
     catch(e) {
-        res.status(500).send(e);
+        res.status(500).send({
+            result: 0,
+        });
+        console.error(e);
     }
 }
 
@@ -31,6 +34,39 @@ exports.getAllBook = async(req, res) => {
         }
     }
     catch(e) {
-        res.status(500).send(e);
+        res.status(500).send({
+            result: 0,
+        });
+        console.error(e);
+    }
+}
+
+exports.deleteBook = async(req, res) => {
+    const book = bookSchema;
+
+    const { author } = req.params;
+    const { title } = req.query;
+
+    if(!title || !author) {
+        return res.status(400).send(`title or author empty`);
+    }
+
+    try {
+        const dbResponse = await book.deleteOne({
+            title: title,
+            author: author
+        });
+
+        if(dbResponse.deletedCount) {
+            return res.status(200).json({
+                result: 1
+            });
+        }
+    }
+    catch(e) {
+        res.status(500).send({
+            result: 0
+        });
+        console.error(e);
     }
 }
